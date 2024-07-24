@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class MyTextButton extends StatelessWidget {
+class MyBorderedLink extends StatelessWidget {
   final String text;
 
-  const MyTextButton({
+  const MyBorderedLink({
     super.key,
     required this.text,
   });
@@ -21,7 +21,7 @@ class MyTextButton extends StatelessWidget {
         side: BorderSide(
           color: Colors.grey.shade900,
         ),
-        overlayColor: Colors.grey.shade600,
+        overlayColor: Colors.pinkAccent.shade200,
       ),
       child: Text(
         text,

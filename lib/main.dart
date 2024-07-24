@@ -1,49 +1,55 @@
 import 'package:corex_flutter_test/pages/home_page.dart';
+import 'package:corex_flutter_test/pages/users/all_users_page.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
+
+final GoRouter _router = GoRouter(
+    initialLocation: '/',
+    routes: <RouteBase>[
+      GoRoute(
+        path: '/',
+        name: 'home',
+        builder: (BuildContext context, GoRouterState state) {
+          return const HomePage();
+        },
+        routes: <RouteBase>[
+          GoRoute(
+            path: 'all-users',
+            name: 'all-users-page',
+            builder: (BuildContext context, GoRouterState state) {
+              return const AllUsersPage();
+            },
+          ),
+        ],
+      ),
+    ],
+    errorBuilder: (context, state) {
+      return const Scaffold(
+        body: Center(
+          child: Text('Page not found'),
+        ),
+      );
+    });
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return MaterialApp.router(
+      title: 'Corex Flutter Test',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
         useMaterial3: true,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Corex Flutter Test"),
-          centerTitle: true,
-          backgroundColor: Colors.grey.shade300,
-          toolbarHeight: 30,
-        ),
-        body: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 25),
-          child: HomePage(),
-        ),
-      ),
+      routerConfig: _router,
     );
   }
 }

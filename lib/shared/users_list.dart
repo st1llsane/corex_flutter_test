@@ -1,5 +1,5 @@
 import 'package:corex_flutter_test/models/user/user.dart';
-import 'package:corex_flutter_test/pages/users/user_list_item.dart';
+import 'package:corex_flutter_test/shared/user_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
@@ -15,10 +15,6 @@ class UsersList extends StatefulWidget {
 
 class _UsersListState extends State<UsersList> {
   final dio = Dio();
-  // final List<User> users = [
-  //   User(id: 1, name: "Sasha 1", email: "email 1"),
-  //   User(id: 2, name: "Sasha 2", email: "email 2"),
-  // ];
   Future<List<User>>? users;
 
   @override
@@ -31,7 +27,6 @@ class _UsersListState extends State<UsersList> {
     final res = await dio.get('https://jsonplaceholder.typicode.com/users');
     List<User> usersList =
         (res.data as List).map((user) => User.fromJson(user)).toList();
-    // print(usersList);
 
     setState(() {
       users = Future.value(usersList);
@@ -69,7 +64,6 @@ class _UsersListState extends State<UsersList> {
           );
         } else {
           List<User> usersData = snapshot.data!;
-          print("USERDSTATA: $usersData");
 
           return ListView.builder(
             scrollDirection: Axis.horizontal,

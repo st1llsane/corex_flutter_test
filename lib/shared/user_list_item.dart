@@ -1,4 +1,4 @@
-import 'package:corex_flutter_test/shared/ui/my_text_button.dart';
+import 'package:corex_flutter_test/shared/ui/my_bordered_link.dart';
 import 'package:flutter/material.dart';
 
 class UserListItem extends StatelessWidget {
@@ -11,7 +11,7 @@ class UserListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyTextButton(
+    return MyBorderedLink(
       text: name,
     );
   }
