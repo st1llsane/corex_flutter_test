@@ -16,12 +16,12 @@ class MyBorderedLink extends StatelessWidget {
         backgroundColor: Colors.transparent,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(2),
         ),
         side: BorderSide(
           color: Colors.grey.shade900,
         ),
-        overlayColor: Colors.pinkAccent.shade200,
+        overlayColor: Colors.pinkAccent.shade100,
       ),
       child: Text(
         text,

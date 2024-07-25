@@ -32,20 +32,20 @@ class HomePage extends StatelessWidget {
               ),
             ], 10),
           ),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MyTitle(text: 'Посты'),
-                SizedBox(
-                  height: 6,
-                ),
-                Expanded(
-                  child: UsersList(),
-                ),
-              ],
-            ),
-          ),
+          // const Expanded(
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       MyTitle(text: 'Посты'),
+          //       SizedBox(
+          //         height: 6,
+          //       ),
+          //       Expanded(
+          //         child: UsersList(),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ], 20),
       ),
     );

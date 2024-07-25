@@ -11,14 +11,12 @@ class PageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text("Corex Flutter Test"),
-      //   centerTitle: true,
-      //   backgroundColor: Colors.grey.shade300,
-      //   toolbarHeight: 30,
-      // ),
+      appBar: AppBar(
+        title: const Text("Corex Flutter Test"),
+        centerTitle: true,
+      ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
         child: child,
       ),
     );

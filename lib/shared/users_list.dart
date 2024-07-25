@@ -1,7 +1,10 @@
-import 'package:corex_flutter_test/models/user/user.dart';
+import 'package:corex_flutter_test/api/bloc/app_bloc.dart';
+import 'package:corex_flutter_test/api/repos/app/abstract_app_repo.dart';
+import 'package:corex_flutter_test/shared/models/user/user.dart';
 import 'package:corex_flutter_test/shared/user_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 
 // ignore: constant_identifier_names
 const int USERS_COUNT_TO_DISPLAY = 5;
@@ -17,22 +20,16 @@ class _UsersListState extends State<UsersList> {
   final dio = Dio();
   Future<List<User>>? users;
 
+  final appBloc = AppBloc();
+
   @override
   void initState() {
     super.initState();
-    getUsers();
-  }
 
-  Future<List<User>> getUsers() async {
-    final res = await dio.get('https://jsonplaceholder.typicode.com/users');
-    List<User> usersList =
-        (res.data as List).map((user) => User.fromJson(user)).toList();
-
-    setState(() {
-      users = Future.value(usersList);
-    });
-
-    return usersList;
+    appBloc.add(LoadUsers());
+    // TODO: может нужен await?
+    users = GetIt.I<AbstractAppRepo>().getUsers();
+    setState(() {});
   }
 
   @override
