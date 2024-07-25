@@ -13,16 +13,17 @@ class AllUsersPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: buildColumnWithGap([
-          const MyTitle(text: 'Все пользователи'),
+          const MyTitle(text: 'All Users'),
           const MyUnderlinedLink(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Color(0xFF64B5F6),
-                size: 13,
-              ),
-              iconAlignment: IconAlignment.start,
-              text: 'На Главную',
-              href: '/'),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Color(0xFF64B5F6),
+              size: 13,
+            ),
+            iconAlignment: IconAlignment.start,
+            text: 'On Home Page',
+            href: '/',
+          ),
         ], 10),
       ),
     );

@@ -11,14 +11,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageContainer(
-      child: Column(
+      child: ListView(
         children: buildColumnWithGap([
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: buildColumnWithGap(const [
-              MyTitle(text: 'Пользователи'),
+              MyTitle(text: 'Users'),
               SizedBox(
-                height: 40,
+                height: 80,
                 child: UsersList(),
               ),
               MyUnderlinedLink(
@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
                   color: Color(0xFF64B5F6),
                   size: 13,
                 ),
-                text: 'Все пользователи',
+                text: 'All Users',
                 href: '/all-users',
               ),
             ], 10),
@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget {
           //   child: Column(
           //     crossAxisAlignment: CrossAxisAlignment.start,
           //     children: [
-          //       MyTitle(text: 'Посты'),
+          //       MyTitle(text: 'Posts'),
           //       SizedBox(
           //         height: 6,
           //       ),

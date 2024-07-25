@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 
 class MyBorderedLink extends StatelessWidget {
   final String text;
+  final VoidCallback onPressed;
 
   const MyBorderedLink({
     super.key,
     required this.text,
+    required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () => {},
+      onPressed: onPressed,
       style: TextButton.styleFrom(
         backgroundColor: Colors.transparent,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),

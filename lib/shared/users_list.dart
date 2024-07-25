@@ -1,9 +1,10 @@
 import 'package:corex_flutter_test/api/bloc/app_bloc.dart';
 import 'package:corex_flutter_test/api/repos/app/abstract_app_repo.dart';
 import 'package:corex_flutter_test/shared/models/user/user.dart';
+import 'package:corex_flutter_test/shared/ui/my_bordered_link.dart';
 import 'package:corex_flutter_test/shared/user_list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 // ignore: constant_identifier_names
@@ -17,50 +18,55 @@ class UsersList extends StatefulWidget {
 }
 
 class _UsersListState extends State<UsersList> {
-  final dio = Dio();
-  Future<List<User>>? users;
-
-  final appBloc = AppBloc();
+  final appBloc = AppBloc(GetIt.I<AbstractAppRepo>());
 
   @override
   void initState() {
     super.initState();
 
     appBloc.add(LoadUsers());
-    // TODO: может нужен await?
-    users = GetIt.I<AbstractAppRepo>().getUsers();
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<User>>(
-      future: users,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        if (snapshot.hasError) {
+    return BlocBuilder<AppBloc, AppState>(
+      bloc: appBloc,
+      builder: (context, state) {
+        if (state is UsersLoadingError) {
           return Center(
-            child: Text(
-              "Error: ${snapshot.error}",
-              style: TextStyle(color: Colors.red.shade900),
+            child: Column(
+              children: [
+                Text(
+                  'Error when loading users. Please, try again later.',
+                  style: TextStyle(
+                    color: Colors.red.shade900,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 15),
+                MyBorderedLink(
+                  text: 'Try again',
+                  onPressed: () => appBloc.add(LoadUsers()),
+                ),
+              ],
             ),
           );
         }
 
-        if ((!snapshot.hasData || snapshot.data!.isEmpty)) {
-          return Center(
-            child: Text(
-              "Users not found",
-              style: TextStyle(color: Colors.grey.shade900),
-            ),
-          );
-        } else {
-          List<User> usersData = snapshot.data!;
+        if (state is UsersLoaded) {
+          List<User> usersList = state.users;
+
+          if (usersList.isEmpty) {
+            return Center(
+              child: Text(
+                'Users were not found.',
+                style: TextStyle(
+                  color: Colors.grey.shade900,
+                  fontSize: 16,
+                ),
+              ),
+            );
+          }
 
           return ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -73,11 +79,18 @@ class _UsersListState extends State<UsersList> {
                     : const EdgeInsets.only(
                         right: 12,
                       ),
-                child: UserListItem(name: usersData[index].name),
+                child: UserListItem(
+                  name: usersList[index].name,
+                  userId: usersList[index].id,
+                ),
               );
             },
           );
         }
+
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
       },
     );
   }

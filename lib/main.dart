@@ -2,6 +2,7 @@ import 'package:corex_flutter_test/api/repos/app/abstract_app_repo.dart';
 import 'package:corex_flutter_test/api/repos/app/app_repo.dart';
 import 'package:corex_flutter_test/pages/home_page.dart';
 import 'package:corex_flutter_test/pages/users/all_users_page.dart';
+import 'package:corex_flutter_test/pages/users/user_details_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';

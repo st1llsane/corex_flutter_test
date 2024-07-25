@@ -17,6 +17,13 @@ final GoRouter _router = GoRouter(
             return const AllUsersPage();
           },
         ),
+        GoRoute(
+          path: 'user-details/:userId',
+          name: 'user-details-page',
+          builder: (BuildContext context, GoRouterState state) {
+            return UserDetailsPage(userId: state.pathParameters['userId']!);
+          },
+        ),
       ],
     ),
   ],
@@ -27,4 +34,5 @@ final GoRouter _router = GoRouter(
       ),
     );
   },
+  debugLogDiagnostics: true,
 );
