@@ -16,7 +16,7 @@ class PageContainer extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        padding: const EdgeInsets.all(15),
         child: child,
       ),
     );

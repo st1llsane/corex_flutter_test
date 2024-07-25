@@ -32,9 +32,9 @@ final GoRouter _router = GoRouter(
   errorBuilder: (context, state) {
     return const Scaffold(
       body: Center(
-        child: Text('Page not found'),
+        child: Text('Page was not found'),
       ),
     );
   },
-  debugLogDiagnostics: true,
+  // debugLogDiagnostics: true,
 );

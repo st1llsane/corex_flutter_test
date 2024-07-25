@@ -1,5 +1,5 @@
-import 'package:corex_flutter_test/api/bloc/app_bloc.dart';
-import 'package:corex_flutter_test/api/repos/app/abstract_app_repo.dart';
+import 'package:corex_flutter_test/api/bloc/user/user_bloc.dart';
+import 'package:corex_flutter_test/api/repos/user/abstract_user_repo.dart';
 import 'package:corex_flutter_test/shared/models/user/user.dart';
 import 'package:corex_flutter_test/shared/ui/my_bordered_link.dart';
 import 'package:corex_flutter_test/shared/user_list_item.dart';
@@ -22,19 +22,19 @@ class UsersList extends StatefulWidget {
 }
 
 class _UsersListState extends State<UsersList> {
-  final appBloc = AppBloc(GetIt.I<AbstractAppRepo>());
+  final userBloc = UserBloc(GetIt.I<AbstractUserRepo>());
 
   @override
   void initState() {
     super.initState();
 
-    appBloc.add(LoadUsers());
+    userBloc.add(LoadUsers());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppBloc, AppState>(
-      bloc: appBloc,
+    return BlocBuilder<UserBloc, UserState>(
+      bloc: userBloc,
       builder: (context, state) {
         if (state is UsersLoadingError) {
           return Center(
@@ -50,7 +50,7 @@ class _UsersListState extends State<UsersList> {
                 const SizedBox(height: 15),
                 MyBorderedLink(
                   text: 'Try again',
-                  onPressed: () => appBloc.add(LoadUsers()),
+                  onPressed: () => userBloc.add(LoadUsers()),
                 ),
               ],
             ),

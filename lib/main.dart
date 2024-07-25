@@ -1,5 +1,5 @@
-import 'package:corex_flutter_test/api/repos/app/abstract_app_repo.dart';
-import 'package:corex_flutter_test/api/repos/app/app_repo.dart';
+import 'package:corex_flutter_test/api/repos/user/abstract_user_repo.dart';
+import 'package:corex_flutter_test/api/repos/user/user_repo.dart';
 import 'package:corex_flutter_test/pages/home_page.dart';
 import 'package:corex_flutter_test/pages/users/all_users_page.dart';
 import 'package:corex_flutter_test/pages/users/user_details_page.dart';
@@ -17,7 +17,7 @@ void main() {
   //     child: const MyApp(),
   //   ),
   // );
-  GetIt.I.registerLazySingleton<AbstractAppRepo>(() => AppRepo(dio: Dio()));
+  GetIt.I.registerLazySingleton<AbstractUserRepo>(() => UserRepo(dio: Dio()));
   runApp(
     const MyApp(),
   );
