@@ -7,11 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-// ignore: constant_identifier_names
-const int USERS_COUNT_TO_DISPLAY = 5;
-
 class UsersList extends StatefulWidget {
-  const UsersList({super.key});
+  final int? userCountToDisplay;
+  final Axis scrollDirection;
+
+  const UsersList({
+    super.key,
+    this.userCountToDisplay,
+    this.scrollDirection = Axis.vertical,
+  });
 
   @override
   State<UsersList> createState() => _UsersListState();
@@ -69,16 +73,14 @@ class _UsersListState extends State<UsersList> {
           }
 
           return ListView.builder(
-            scrollDirection: Axis.horizontal,
+            scrollDirection: widget.scrollDirection,
             shrinkWrap: true,
-            itemCount: USERS_COUNT_TO_DISPLAY,
+            itemCount: widget.userCountToDisplay ?? usersList.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: index == USERS_COUNT_TO_DISPLAY - 1
-                    ? EdgeInsets.zero
-                    : const EdgeInsets.only(
-                        right: 12,
-                      ),
+                padding: widget.scrollDirection == Axis.horizontal
+                    ? const EdgeInsets.only(right: 12)
+                    : const EdgeInsets.only(bottom: 4),
                 child: UserListItem(
                   name: usersList[index].name,
                   userId: usersList[index].id,

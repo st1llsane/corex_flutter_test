@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class MyUnderlinedLink extends StatelessWidget {
   final Icon? icon;
   final IconAlignment iconAlignment;
   final String text;
-  final String href;
+  final VoidCallback onPressed;
 
   const MyUnderlinedLink({
     super.key,
     this.icon,
     this.iconAlignment = IconAlignment.end,
     required this.text,
-    required this.href,
+    required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
-      onPressed: () => context.go(href),
+      onPressed: onPressed,
       style: TextButton.styleFrom(
         foregroundColor: const Color(0xFF64B5F6),
         backgroundColor: Colors.transparent,

@@ -17,14 +17,16 @@ final GoRouter _router = GoRouter(
             return const AllUsersPage();
           },
         ),
-        GoRoute(
-          path: 'user-details/:userId',
-          name: 'user-details-page',
-          builder: (BuildContext context, GoRouterState state) {
-            return UserDetailsPage(userId: state.pathParameters['userId']!);
-          },
-        ),
       ],
+    ),
+    GoRoute(
+      path: '/user-details',
+      name: 'user-details-page',
+      builder: (BuildContext context, GoRouterState state) {
+        final userId = state.uri.queryParameters['userId']!;
+
+        return UserDetailsPage(userId: userId);
+      },
     ),
   ],
   errorBuilder: (context, state) {

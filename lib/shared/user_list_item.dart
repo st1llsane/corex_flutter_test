@@ -16,7 +16,7 @@ class UserListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return MyBorderedLink(
       text: name,
-      onPressed: () => context.go('/user-details/:$userId'),
+      onPressed: () => context.go('/user-details?userId=$userId'),
     );
   }
 }
