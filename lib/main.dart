@@ -17,7 +17,16 @@ void main() {
   //     child: const MyApp(),
   //   ),
   // );
-  GetIt.I.registerLazySingleton<AbstractUserRepo>(() => UserRepo(dio: Dio()));
+  late Dio dio;
+
+  final options = BaseOptions(
+    connectTimeout: const Duration(seconds: 5),
+    receiveTimeout: const Duration(seconds: 3),
+  );
+
+  dio = Dio(options);
+
+  GetIt.I.registerLazySingleton<AbstractUserRepo>(() => UserRepo(dio: dio));
   runApp(
     const MyApp(),
   );

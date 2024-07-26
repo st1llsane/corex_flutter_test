@@ -1,12 +1,18 @@
 part of 'user_bloc.dart';
 
-class UserEvent {}
+abstract class UserEvent {}
 
 // users
-class LoadUsers extends UserEvent {}
+class LoadUsers implements UserEvent {
+  final Completer? completer;
+
+  LoadUsers({
+    this.completer,
+  });
+}
 
 // user by id
-class LoadUserById extends UserEvent {
+class LoadUserById implements UserEvent {
   final String userId;
 
   LoadUserById({

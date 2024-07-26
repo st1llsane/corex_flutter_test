@@ -1,13 +1,13 @@
 part of 'user_bloc.dart';
 
-class UserState {}
+abstract class UserState {}
 
 // users
-class UsersInitial extends UserState {}
+class UsersInitial implements UserState {}
 
-class UsersLoading extends UserState {}
+class UsersLoading implements UserState {}
 
-class UsersLoaded extends UserState {
+class UsersLoaded implements UserState {
   final List<User> users;
 
   UsersLoaded({
@@ -15,7 +15,7 @@ class UsersLoaded extends UserState {
   });
 }
 
-class UsersLoadingError extends UserState {
+class UsersLoadingError implements UserState {
   final Object? exception;
 
   UsersLoadingError({
@@ -24,11 +24,11 @@ class UsersLoadingError extends UserState {
 }
 
 // user by id
-class UserByIdInitial extends UserState {}
+class UserByIdInitial implements UserState {}
 
-class UserByIdLoading extends UserState {}
+class UserByIdLoading implements UserState {}
 
-class UserByIdLoaded extends UserState {
+class UserByIdLoaded implements UserState {
   final User user;
 
   UserByIdLoaded({
@@ -36,7 +36,7 @@ class UserByIdLoaded extends UserState {
   });
 }
 
-class UserByIdLoadingError extends UserState {
+class UserByIdLoadingError implements UserState {
   final Object? exception;
 
   UserByIdLoadingError({

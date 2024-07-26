@@ -1,7 +1,7 @@
 import 'package:corex_flutter_test/api/repos/user/abstract_user_repo.dart';
 import 'package:corex_flutter_test/shared/models/user/user.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
 class UserRepo implements AbstractUserRepo {
   final Dio dio;
@@ -13,7 +13,6 @@ class UserRepo implements AbstractUserRepo {
   @override
   Future<List<User>> getUsers() async {
     final res = await dio.get('https://jsonplaceholder.typicode.com/users');
-
     // debugPrint(res.toString());
 
     List<User> usersList =
@@ -31,7 +30,7 @@ class UserRepo implements AbstractUserRepo {
       },
     );
 
-    debugPrint('USER BY ID: ${res.toString()}');
+    // debugPrint('USER BY ID: ${res.toString()}');
 
     List<User> user =
         (res.data as List).map((user) => User.fromJson(user)).toList();

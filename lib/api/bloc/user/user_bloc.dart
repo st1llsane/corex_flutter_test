@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:corex_flutter_test/api/repos/user/abstract_user_repo.dart';
 import 'package:corex_flutter_test/shared/models/user/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,13 +13,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc(this.userRepo) : super(UsersInitial()) {
     on<LoadUsers>((event, emit) async {
       try {
-        emit(UsersLoading());
+        if (state is! UsersLoaded) {
+          emit(UsersLoading());
+        }
 
         final users = await userRepo.getUsers();
-
         emit(UsersLoaded(users: users));
       } catch (e) {
         emit(UsersLoadingError(exception: e));
+      } finally {
+        event.completer?.complete();
       }
     });
 
