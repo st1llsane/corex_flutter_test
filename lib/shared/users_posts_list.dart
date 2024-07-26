@@ -1,34 +1,34 @@
-import 'package:corex_flutter_test/api/bloc/user/user_bloc.dart';
-import 'package:corex_flutter_test/shared/models/user/user.dart';
+import 'package:corex_flutter_test/api/bloc/user_post/user_post_bloc.dart';
+import 'package:corex_flutter_test/shared/models/post/post.dart';
 import 'package:corex_flutter_test/shared/ui/my_bordered_link.dart';
-import 'package:corex_flutter_test/shared/user_list_item.dart';
+import 'package:corex_flutter_test/shared/user_post_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UsersList extends StatefulWidget {
-  final UserBloc userBloc;
-  final int? userCountToDisplay;
+class UsersPostsList extends StatefulWidget {
+  final UserPostBloc userPostBloc;
+  final int? postCountToDisplay;
 
-  const UsersList({
+  const UsersPostsList({
     super.key,
-    required this.userBloc,
-    this.userCountToDisplay,
+    required this.userPostBloc,
+    this.postCountToDisplay,
   });
 
   @override
-  State<UsersList> createState() => _UsersListState();
+  State<UsersPostsList> createState() => _UsersPostsListState();
 }
 
-class _UsersListState extends State<UsersList> {
+class _UsersPostsListState extends State<UsersPostsList> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserBloc, UserState>(
-      bloc: widget.userBloc,
+    return BlocBuilder<UserPostBloc, UserPostState>(
+      bloc: widget.userPostBloc,
       builder: (context, state) {
-        if (state is UsersLoaded) {
-          List<User> usersList = state.users;
+        if (state is UserPostsLoaded) {
+          List<UserPost> postsList = state.usersPosts;
 
-          if (usersList.isEmpty) {
+          if (postsList.isEmpty) {
             return Center(
               child: Text(
                 'Users were not found.',
@@ -41,22 +41,22 @@ class _UsersListState extends State<UsersList> {
           }
 
           return ListView.builder(
-            scrollDirection: Axis.horizontal,
+            scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: widget.userCountToDisplay ?? usersList.length,
+            itemCount: widget.postCountToDisplay ?? postsList.length,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.only(right: 12),
-                child: UserListItem(
-                  userName: usersList[index].name,
-                  userId: usersList[index].id,
+                child: UserPostListItem(
+                  postTitle: postsList[index].title,
+                  postId: postsList[index].id,
                 ),
               );
             },
           );
         }
 
-        if (state is UsersLoadingError) {
+        if (state is UserPostsLoadingError) {
           return Center(
             child: Column(
               children: [
@@ -70,7 +70,7 @@ class _UsersListState extends State<UsersList> {
                 const SizedBox(height: 15),
                 MyBorderedLink(
                   text: 'Try again',
-                  onPressed: () => widget.userBloc.add(LoadUsers()),
+                  onPressed: () => widget.userPostBloc.add(LoadUsersPosts()),
                 ),
               ],
             ),

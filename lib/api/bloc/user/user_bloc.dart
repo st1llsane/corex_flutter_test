@@ -28,10 +28,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<LoadUserById>((event, emit) async {
       try {
-        emit(UserByIdLoading());
+        if (state is! UserByIdLoaded) {
+          emit(UsersLoading());
+        }
 
         final user = await userRepo.getUserById(event.userId);
-
         emit(UserByIdLoaded(user: user));
       } catch (e) {
         emit(UserByIdLoadingError(exception: e));

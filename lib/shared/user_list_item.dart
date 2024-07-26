@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class UserListItem extends StatelessWidget {
-  final String name;
+  final String userName;
   final int userId;
 
   const UserListItem({
     super.key,
-    required this.name,
+    required this.userName,
     required this.userId,
   });
 
   @override
   Widget build(BuildContext context) {
     return MyBorderedLink(
-      text: name,
+      text: userName,
       onPressed: () => context.go('/user-details?userId=$userId'),
     );
   }

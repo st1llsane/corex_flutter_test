@@ -5,7 +5,7 @@ targets:
         options:
           # Tells Freezed not to format .freezed.dart files.
           # This can significantly speed up code-generation.
-          format: false
+          format: true
           # Disable the generation of copyWith/== for the entire project
           copy_with: false
           equal: true

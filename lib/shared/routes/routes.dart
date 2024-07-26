@@ -17,6 +17,13 @@ final GoRouter _router = GoRouter(
             return const AllUsersPage();
           },
         ),
+        GoRoute(
+          path: 'all-users-posts',
+          name: 'all-users-posts-page',
+          builder: (BuildContext context, GoRouterState state) {
+            return const AllUsersPostsPage();
+          },
+        ),
       ],
     ),
     GoRoute(
