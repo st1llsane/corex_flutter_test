@@ -13,9 +13,9 @@ class LoadUsersPosts implements UserPostEvent {
 
 // user by id
 class LoadUserPostById implements UserPostEvent {
-  final String userId;
+  final String postId;
 
   LoadUserPostById({
-    required this.userId,
+    required this.postId,
   });
 }

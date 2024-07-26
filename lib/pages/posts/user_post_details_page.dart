@@ -1,142 +1,117 @@
-import 'package:corex_flutter_test/api/bloc/user/user_bloc.dart';
-import 'package:corex_flutter_test/api/repos/user/abstract_user_repo.dart';
-import 'package:corex_flutter_test/shared/models/user/user.dart';
-import 'package:corex_flutter_test/shared/page_container.dart';
-import 'package:corex_flutter_test/shared/ui/my_bordered_link.dart';
-import 'package:corex_flutter_test/shared/ui/my_title.dart';
-import 'package:corex_flutter_test/shared/ui/my_underlined_link.dart';
+import 'package:corex_flutter_test/api/bloc/user_post/user_post_bloc.dart';
+import 'package:corex_flutter_test/api/repos/user_post/abstract_user_repo.dart';
+import 'package:corex_flutter_test/shared/models/post/post.dart';
+import 'package:corex_flutter_test/shared/ui/my_circular_progress_indicator.dart';
+import 'package:corex_flutter_test/shared/ui/my_outlined_button.dart';
+import 'package:corex_flutter_test/shared/ui/my_underlined_button.dart';
 import 'package:corex_flutter_test/shared/utils/build_column_with_gap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-class UserDetailsPage extends StatefulWidget {
-  final String userId;
+class UserPostDetailsPage extends StatefulWidget {
+  final String postId;
 
-  const UserDetailsPage({
+  const UserPostDetailsPage({
     super.key,
-    required this.userId,
+    required this.postId,
   });
 
   @override
-  State<UserDetailsPage> createState() => _UserDetailsPageState();
+  State<UserPostDetailsPage> createState() => _UserPostDetailsPageState();
 }
 
-class _UserDetailsPageState extends State<UserDetailsPage> {
-  final userBloc = UserBloc(GetIt.I<AbstractUserRepo>());
+class _UserPostDetailsPageState extends State<UserPostDetailsPage> {
+  final userPostBloc = UserPostBloc(GetIt.I<AbstractUserPostRepo>());
+  late ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
 
-    userBloc.add(LoadUserById(userId: widget.userId));
+    scrollController = ScrollController();
+    userPostBloc.add(LoadUserPostById(postId: widget.postId));
   }
 
   @override
   Widget build(BuildContext context) {
-    return PageContainer(
-      child: BlocBuilder<UserBloc, UserState>(
-        bloc: userBloc,
-        builder: (context, state) {
-          if (state is UserByIdLoadingError) {
-            return Center(
-              child: Column(
-                children: [
-                  Text(
-                    'Error when loading users. Please, try again later.',
-                    style: TextStyle(
-                      color: Colors.red.shade900,
-                      fontSize: 16,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        MyUnderlinedButton(
+          onPressed: () => context.go('/all-users-posts'),
+          text: 'All Posts',
+          icon: Icons.arrow_back_ios,
+          iconAlignment: IconAlignment.start,
+        ),
+        const SizedBox(height: 20),
+        Expanded(
+          child: BlocBuilder<UserPostBloc, UserPostState>(
+            bloc: userPostBloc,
+            builder: (context, state) {
+              final ThemeData theme = Theme.of(context);
+
+              if (state is UserPostByIdLoaded) {
+                final UserPost post = state.userPost;
+
+                return ScrollbarTheme(
+                  data: theme.scrollbarTheme,
+                  child: Scrollbar(
+                    controller: scrollController,
+                    scrollbarOrientation: ScrollbarOrientation.left,
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    radius: const Radius.circular(4),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: ListView(
+                        controller: scrollController,
+                        children: buildColumnWithGap([
+                          Text('ID: ${post.id}'),
+                          Text('User ID: ${post.userId}'),
+                          Text('Title: ${post.title}'),
+                          Text('Body: ${post.body}'),
+                        ], 12),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 15),
-                  MyBorderedLink(
-                    text: 'Try again',
-                    onPressed: () => userBloc.add(LoadUsers()),
-                  ),
-                ],
-              ),
-            );
-          }
+                );
+              }
 
-          if (state is UserByIdLoaded) {
-            final User user = state.user;
-
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: buildColumnWithGap([
-                  MyUnderlinedLink(
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Color(0xFF64B5F6),
-                      size: 13,
-                    ),
-                    iconAlignment: IconAlignment.start,
-                    text: 'On Home Page',
-                    onPressed: () => context.go('/'),
+              if (state is UserPostByIdLoadingError) {
+                return Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Error when loading users. Please, try again later.',
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: Colors.red.shade600,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      MyOutlinedButton(
+                        onPressed: () => userPostBloc
+                            .add(LoadUserPostById(postId: widget.postId)),
+                        text: 'Try again',
+                      ),
+                    ],
                   ),
-                  MyUnderlinedLink(
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Color(0xFF64B5F6),
-                      size: 13,
-                    ),
-                    iconAlignment: IconAlignment.start,
-                    text: 'All Users',
-                    onPressed: () => context.go('/all-users'),
-                  ),
-                  MyTitle(text: 'Name: ${user.name}'),
-                  Text('Username: ${user.username}'),
-                  Text('Email: ${user.email}'),
-                  const Text('Adress: '),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: buildColumnWithGap(
-                        user.address.entries.map((entry) {
-                          final capitalizedKey = entry.key[0].toUpperCase() +
-                              entry.key.substring(1);
+                );
+              }
 
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 15),
-                            child: Text(
-                              '$capitalizedKey: ${entry.value}',
-                            ),
-                          );
-                        }).toList(),
-                        10),
-                  ),
-                  Text('Adress: ${user.address.length}'),
-                  Text('Phone: ${user.phone}'),
-                  Text('Website: ${user.website}'),
-                  const Text('Company: '),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: buildColumnWithGap(
-                        user.company.entries.map((entry) {
-                          final capitalizedKey = entry.key[0].toUpperCase() +
-                              entry.key.substring(1);
-
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 15),
-                            child: Text(
-                              '$capitalizedKey: ${entry.value}',
-                            ),
-                          );
-                        }).toList(),
-                        10),
-                  ),
-                ], 10),
-              ),
-            );
-          }
-
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
+              return const MyCircularProgressIndicator();
+            },
+          ),
+        ),
+        const SizedBox(height: 20),
+        MyUnderlinedButton(
+          onPressed: () => context.go('/'),
+          text: 'On Home Page',
+          icon: Icons.arrow_back_ios,
+          iconAlignment: IconAlignment.start,
+        ),
+      ],
     );
   }
 }

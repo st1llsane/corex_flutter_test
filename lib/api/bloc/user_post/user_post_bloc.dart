@@ -32,7 +32,7 @@ class UserPostBloc extends Bloc<UserPostEvent, UserPostState> {
           emit(UserPostsLoading());
         }
 
-        final userPost = await userPostRepo.getUserPostById(event.userId);
+        final userPost = await userPostRepo.getUserPostById(event.postId);
         emit(UserPostByIdLoaded(userPost: userPost));
       } catch (e) {
         emit(UserPostByIdLoadingError(exception: e));

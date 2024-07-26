@@ -1,18 +1,22 @@
 import 'package:corex_flutter_test/api/bloc/user_post/user_post_bloc.dart';
 import 'package:corex_flutter_test/shared/models/post/post.dart';
-import 'package:corex_flutter_test/shared/ui/my_bordered_link.dart';
-import 'package:corex_flutter_test/shared/user_post_list_item.dart';
+import 'package:corex_flutter_test/shared/types/types.dart';
+import 'package:corex_flutter_test/shared/ui/my_circular_progress_indicator.dart';
+import 'package:corex_flutter_test/shared/ui/my_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class UsersPostsList extends StatefulWidget {
   final UserPostBloc userPostBloc;
   final int? postCountToDisplay;
+  final ItemType? itemsType;
 
   const UsersPostsList({
     super.key,
     required this.userPostBloc,
     this.postCountToDisplay,
+    this.itemsType = ItemType.text,
   });
 
   @override
@@ -20,39 +24,69 @@ class UsersPostsList extends StatefulWidget {
 }
 
 class _UsersPostsListState extends State<UsersPostsList> {
+  late ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserPostBloc, UserPostState>(
       bloc: widget.userPostBloc,
       builder: (context, state) {
+        final ThemeData theme = Theme.of(context);
+
         if (state is UserPostsLoaded) {
           List<UserPost> postsList = state.usersPosts;
 
           if (postsList.isEmpty) {
             return Center(
               child: Text(
-                'Users were not found.',
-                style: TextStyle(
-                  color: Colors.grey.shade900,
-                  fontSize: 16,
-                ),
+                'Posts were not found.',
+                style: theme.textTheme.bodyLarge,
               ),
             );
           }
 
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: widget.postCountToDisplay ?? postsList.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: UserPostListItem(
-                  postTitle: postsList[index].title,
-                  postId: postsList[index].id,
+          return ScrollbarTheme(
+            data: theme.scrollbarTheme,
+            child: Scrollbar(
+              controller: scrollController,
+              scrollbarOrientation: ScrollbarOrientation.left,
+              thumbVisibility: true,
+              trackVisibility: true,
+              radius: const Radius.circular(4),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: widget.postCountToDisplay ?? postsList.length,
+                  itemBuilder: (context, index) {
+                    final bool isLastItem = index <
+                        ((widget.postCountToDisplay ?? postsList.length) - 1);
+
+                    return Padding(
+                      padding: !isLastItem
+                          ? const EdgeInsets.only(bottom: 0)
+                          : const EdgeInsets.only(bottom: 15),
+                      child: widget.itemsType == ItemType.text
+                          ? Text(
+                              '${index + 1}. ${postsList[index].title}',
+                              style: theme.textTheme.bodyMedium,
+                            )
+                          : MyOutlinedButton(
+                              onPressed: () => context.go(
+                                  '/user-post-details?postId=${postsList[index].id}'),
+                              text: '${index + 1}. ${postsList[index].title}',
+                            ),
+                    );
+                  },
                 ),
-              );
-            },
+              ),
+            ),
           );
         }
 
@@ -61,14 +95,13 @@ class _UsersPostsListState extends State<UsersPostsList> {
             child: Column(
               children: [
                 Text(
-                  'Error when loading users. Please, try again later.',
-                  style: TextStyle(
-                    color: Colors.red.shade900,
-                    fontSize: 16,
+                  'Error when loading posts. Please, try again later.',
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    color: Colors.red.shade600,
                   ),
                 ),
                 const SizedBox(height: 15),
-                MyBorderedLink(
+                MyOutlinedButton(
                   text: 'Try again',
                   onPressed: () => widget.userPostBloc.add(LoadUsersPosts()),
                 ),
@@ -77,9 +110,7 @@ class _UsersPostsListState extends State<UsersPostsList> {
           );
         }
 
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const MyCircularProgressIndicator();
       },
     );
   }
