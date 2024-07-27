@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:corex_flutter_test/api/bloc/user/user_bloc.dart';
 import 'package:corex_flutter_test/api/bloc/user_post/user_post_bloc.dart';
 import 'package:corex_flutter_test/api/repos/user/abstract_user_repo.dart';
-import 'package:corex_flutter_test/api/repos/user_post/abstract_user_repo.dart';
+import 'package:corex_flutter_test/api/repos/user_post/abstract_user_post_repo.dart';
 import 'package:corex_flutter_test/shared/ui/my_underlined_button.dart';
 import 'package:corex_flutter_test/shared/users_list.dart';
 import 'package:corex_flutter_test/shared/users_posts_list.dart';
@@ -60,10 +60,15 @@ class _HomePageState extends State<HomePage> {
                 direction: Axis.horizontal,
               ),
               const SizedBox(height: 20),
-              MyUnderlinedButton(
-                text: 'All Users',
-                icon: Icons.arrow_forward_ios,
-                onPressed: () => context.go('/all-users'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  MyUnderlinedButton(
+                    text: 'All Users',
+                    icon: Icons.arrow_forward_ios,
+                    onPressed: () => context.push('/all-users'),
+                  ),
+                ],
               ),
             ],
           ),
@@ -84,10 +89,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                MyUnderlinedButton(
-                  text: 'All Posts',
-                  icon: Icons.arrow_forward_ios,
-                  onPressed: () => context.go('/all-users-posts'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    MyUnderlinedButton(
+                      text: 'All Posts',
+                      icon: Icons.arrow_forward_ios,
+                      onPressed: () => context.push('/all-users-posts'),
+                    ),
+                  ],
                 ),
               ],
             ),

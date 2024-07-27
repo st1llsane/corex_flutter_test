@@ -1,5 +1,5 @@
 import 'package:corex_flutter_test/api/bloc/user_post/user_post_bloc.dart';
-import 'package:corex_flutter_test/api/repos/user_post/abstract_user_repo.dart';
+import 'package:corex_flutter_test/api/repos/user_post/abstract_user_post_repo.dart';
 import 'package:corex_flutter_test/shared/models/post/post.dart';
 import 'package:corex_flutter_test/shared/ui/my_circular_progress_indicator.dart';
 import 'package:corex_flutter_test/shared/ui/my_outlined_button.dart';
@@ -39,13 +39,6 @@ class _UserPostDetailsPageState extends State<UserPostDetailsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MyUnderlinedButton(
-          onPressed: () => context.go('/all-users-posts'),
-          text: 'All Posts',
-          icon: Icons.arrow_back_ios,
-          iconAlignment: IconAlignment.start,
-        ),
-        const SizedBox(height: 20),
         Expanded(
           child: BlocBuilder<UserPostBloc, UserPostState>(
             bloc: userPostBloc,
@@ -101,6 +94,13 @@ class _UserPostDetailsPageState extends State<UserPostDetailsPage> {
               return const MyCircularProgressIndicator();
             },
           ),
+        ),
+        const SizedBox(height: 20),
+        MyUnderlinedButton(
+          onPressed: () => context.pop(),
+          text: 'All Posts',
+          icon: Icons.arrow_back_ios,
+          iconAlignment: IconAlignment.start,
         ),
         const SizedBox(height: 20),
         MyUnderlinedButton(

@@ -1,5 +1,5 @@
 import 'package:corex_flutter_test/api/bloc/user_post/user_post_bloc.dart';
-import 'package:corex_flutter_test/api/repos/user_post/abstract_user_repo.dart';
+import 'package:corex_flutter_test/api/repos/user_post/abstract_user_post_repo.dart';
 import 'package:corex_flutter_test/shared/types/types.dart';
 import 'package:corex_flutter_test/shared/ui/my_underlined_button.dart';
 import 'package:corex_flutter_test/shared/users_posts_list.dart';
@@ -18,13 +18,6 @@ class _AllUsersPostsPageState extends State<AllUsersPostsPage> {
   final userPostBloc = UserPostBloc(GetIt.I<AbstractUserPostRepo>());
 
   @override
-  void initState() {
-    super.initState();
-
-    userPostBloc.add(LoadUsersPosts());
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,11 +34,23 @@ class _AllUsersPostsPageState extends State<AllUsersPostsPage> {
           ),
         ),
         const SizedBox(height: 20),
-        MyUnderlinedButton(
-          onPressed: () => context.pop(),
-          text: 'On Home Page',
-          icon: Icons.arrow_back_ios,
-          iconAlignment: IconAlignment.start,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            MyUnderlinedButton(
+              onPressed: () => context.pop(),
+              text: 'Home Page',
+              icon: Icons.arrow_back_ios,
+              iconAlignment: IconAlignment.start,
+            ),
+            MyUnderlinedButton(
+              onPressed: () =>
+                  context.push('/all-users-posts/favorite-users-posts'),
+              text: 'Favorite Posts Page',
+              icon: Icons.arrow_forward_ios,
+              iconAlignment: IconAlignment.end,
+            )
+          ],
         ),
       ],
     );

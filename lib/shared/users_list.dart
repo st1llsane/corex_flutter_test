@@ -83,8 +83,8 @@ class _UsersListState extends State<UsersList> {
                                 style: theme.textTheme.bodyMedium,
                               )
                             : MyOutlinedButton(
-                                onPressed: () => context
-                                    .go('/user-details?userId=${user.id}'),
+                                onPressed: () => context.push(
+                                    '/all-users/user-details?userId=${user.id}'),
                                 text: '${index + 1}. ${user.name}',
                               ),
                       );
@@ -126,8 +126,8 @@ class _UsersListState extends State<UsersList> {
                                     style: theme.textTheme.bodyMedium,
                                   )
                                 : MyOutlinedButton(
-                                    onPressed: () => context
-                                        .go('/user-details?userId=${user.id}'),
+                                    onPressed: () => context.push(
+                                        '/all-users/user-details?userId=${user.id}'),
                                     text: '${index + 1}. ${user.name}',
                                   ),
                           );

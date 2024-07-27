@@ -1,4 +1,4 @@
-import 'package:corex_flutter_test/api/repos/user_post/abstract_user_repo.dart';
+import 'package:corex_flutter_test/api/repos/user_post/abstract_user_post_repo.dart';
 import 'package:corex_flutter_test/shared/models/post/post.dart';
 import 'package:dio/dio.dart';
 

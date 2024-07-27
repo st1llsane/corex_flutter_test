@@ -39,13 +39,6 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        MyUnderlinedButton(
-          icon: Icons.arrow_back_ios,
-          iconAlignment: IconAlignment.start,
-          text: 'All Users',
-          onPressed: () => context.go('/all-users'),
-        ),
-        const SizedBox(height: 20),
         Expanded(
           child: BlocBuilder<UserBloc, UserState>(
             bloc: userBloc,
@@ -141,6 +134,13 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               return const MyCircularProgressIndicator();
             },
           ),
+        ),
+        const SizedBox(height: 20),
+        MyUnderlinedButton(
+          icon: Icons.arrow_back_ios,
+          iconAlignment: IconAlignment.start,
+          text: 'All Users',
+          onPressed: () => context.pop(),
         ),
         const SizedBox(height: 20),
         MyUnderlinedButton(

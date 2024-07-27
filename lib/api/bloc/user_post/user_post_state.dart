@@ -3,11 +3,11 @@ part of 'user_post_bloc.dart';
 abstract class UserPostState {}
 
 // posts
-class UserPostsInitial implements UserPostState {}
+class UserPostsInitial extends UserPostState {}
 
-class UserPostsLoading implements UserPostState {}
+class UserPostsLoading extends UserPostState {}
 
-class UserPostsLoaded implements UserPostState {
+class UserPostsLoaded extends UserPostState {
   final List<UserPost> usersPosts;
 
   UserPostsLoaded({
@@ -15,7 +15,7 @@ class UserPostsLoaded implements UserPostState {
   });
 }
 
-class UserPostsLoadingError implements UserPostState {
+class UserPostsLoadingError extends UserPostState {
   final Object? exception;
 
   UserPostsLoadingError({
@@ -24,11 +24,11 @@ class UserPostsLoadingError implements UserPostState {
 }
 
 // post by id
-class UserPostByIdInitial implements UserPostState {}
+class UserPostByIdInitial extends UserPostState {}
 
-class UserPostByIdLoading implements UserPostState {}
+class UserPostByIdLoading extends UserPostState {}
 
-class UserPostByIdLoaded implements UserPostState {
+class UserPostByIdLoaded extends UserPostState {
   final UserPost userPost;
 
   UserPostByIdLoaded({
@@ -36,7 +36,7 @@ class UserPostByIdLoaded implements UserPostState {
   });
 }
 
-class UserPostByIdLoadingError implements UserPostState {
+class UserPostByIdLoadingError extends UserPostState {
   final Object? exception;
 
   UserPostByIdLoadingError({

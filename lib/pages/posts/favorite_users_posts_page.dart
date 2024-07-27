@@ -1,27 +1,22 @@
-import 'package:corex_flutter_test/api/bloc/user/user_bloc.dart';
-import 'package:corex_flutter_test/api/repos/user/abstract_user_repo.dart';
-import 'package:corex_flutter_test/shared/types/types.dart';
+import 'package:corex_flutter_test/api/bloc/user_post/favorite_user_post_bloc.dart';
+import 'package:corex_flutter_test/shared/favorite_users_posts_list.dart';
 import 'package:corex_flutter_test/shared/ui/my_underlined_button.dart';
-import 'package:corex_flutter_test/shared/users_list.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-class AllUsersPage extends StatefulWidget {
-  const AllUsersPage({super.key});
+class FavoriteUsersPostsPage extends StatefulWidget {
+  const FavoriteUsersPostsPage({super.key});
 
   @override
-  State<AllUsersPage> createState() => _AllUsersPageState();
+  State<FavoriteUsersPostsPage> createState() => _UsersPostsFavoritePageState();
 }
 
-class _AllUsersPageState extends State<AllUsersPage> {
-  final userBloc = UserBloc(GetIt.I<AbstractUserRepo>());
+class _UsersPostsFavoritePageState extends State<FavoriteUsersPostsPage> {
+  final favoriteUserPostBloc = FavoriteUserPostBloc();
 
   @override
   void initState() {
     super.initState();
-
-    userBloc.add(LoadUsers());
   }
 
   @override
@@ -30,20 +25,19 @@ class _AllUsersPageState extends State<AllUsersPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'All Users',
+          'Favorite Posts',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         const SizedBox(height: 20),
         Expanded(
-          child: UsersList(
-            userBloc: userBloc,
-            itemsType: ItemType.link,
+          child: FavoriteUsersPostsList(
+            favoriteUserPostBloc: favoriteUserPostBloc,
           ),
         ),
         const SizedBox(height: 20),
         MyUnderlinedButton(
           onPressed: () => context.pop(),
-          text: 'Home Page',
+          text: 'Go Back',
           icon: Icons.arrow_back_ios,
           iconAlignment: IconAlignment.start,
         ),
