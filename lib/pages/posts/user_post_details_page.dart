@@ -68,8 +68,6 @@ class _UserPostDetailsPageState extends State<UserPostDetailsPage> {
                       child: ListView(
                         controller: scrollController,
                         children: buildColumnWithGap([
-                          Text('ID: ${post.id}'),
-                          Text('User ID: ${post.userId}'),
                           Text('Title: ${post.title}'),
                           Text('Body: ${post.body}'),
                         ], 12),

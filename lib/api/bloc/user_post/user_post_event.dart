@@ -2,7 +2,7 @@ part of 'user_post_bloc.dart';
 
 abstract class UserPostEvent {}
 
-// users
+// posts
 class LoadUsersPosts implements UserPostEvent {
   final Completer? completer;
 
@@ -11,7 +11,7 @@ class LoadUsersPosts implements UserPostEvent {
   });
 }
 
-// user by id
+// post by id
 class LoadUserPostById implements UserPostEvent {
   final String postId;
 

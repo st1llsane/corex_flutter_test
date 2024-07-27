@@ -31,6 +31,7 @@ class _UsersListState extends State<UsersList> {
   @override
   void initState() {
     super.initState();
+
     scrollController = ScrollController();
   }
 
@@ -70,6 +71,7 @@ class _UsersListState extends State<UsersList> {
                     itemBuilder: (context, index) {
                       final bool isLastItem = index <
                           ((widget.userCountToDisplay ?? usersList.length) - 1);
+                      final User user = usersList[index];
 
                       return Padding(
                         padding: !isLastItem
@@ -77,13 +79,13 @@ class _UsersListState extends State<UsersList> {
                             : const EdgeInsets.only(bottom: 10),
                         child: widget.itemsType == ItemType.text
                             ? Text(
-                                '${index + 1}. ${usersList[index].name}',
+                                '${index + 1}. ${user.name}',
                                 style: theme.textTheme.bodyMedium,
                               )
                             : MyOutlinedButton(
-                                onPressed: () => context.go(
-                                    '/user-details?userId=${usersList[index].id}'),
-                                text: '${index + 1}. ${usersList[index].name}',
+                                onPressed: () => context
+                                    .go('/user-details?userId=${user.id}'),
+                                text: '${index + 1}. ${user.name}',
                               ),
                       );
                     },
@@ -112,6 +114,7 @@ class _UsersListState extends State<UsersList> {
                           final bool isLastItem = index <
                               ((widget.userCountToDisplay ?? usersList.length) -
                                   1);
+                          final User user = usersList[index];
 
                           return Padding(
                             padding: isLastItem
@@ -119,14 +122,13 @@ class _UsersListState extends State<UsersList> {
                                 : const EdgeInsets.only(right: 2),
                             child: widget.itemsType == ItemType.text
                                 ? Text(
-                                    '${index + 1}. ${usersList[index].name}',
+                                    '${index + 1}. ${user.name}',
                                     style: theme.textTheme.bodyMedium,
                                   )
                                 : MyOutlinedButton(
-                                    onPressed: () => context.go(
-                                        '/user-details?userId=${usersList[index].id}'),
-                                    text:
-                                        '${index + 1}. ${usersList[index].name}',
+                                    onPressed: () => context
+                                        .go('/user-details?userId=${user.id}'),
+                                    text: '${index + 1}. ${user.name}',
                                   ),
                           );
                         },

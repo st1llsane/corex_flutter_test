@@ -24,12 +24,27 @@ class UsersPostsList extends StatefulWidget {
 }
 
 class _UsersPostsListState extends State<UsersPostsList> {
+  List<UserPost> postsList = [];
   late ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
+
     scrollController = ScrollController();
+    widget.userPostBloc.stream.listen((state) {
+      if (state is UserPostsLoaded) {
+        setState(() {
+          postsList = state.usersPosts;
+        });
+      }
+    });
+  }
+
+  void hidePost(UserPost post) {
+    setState(() {
+      postsList.remove(post);
+    });
   }
 
   @override
@@ -40,8 +55,6 @@ class _UsersPostsListState extends State<UsersPostsList> {
         final ThemeData theme = Theme.of(context);
 
         if (state is UserPostsLoaded) {
-          List<UserPost> postsList = state.usersPosts;
-
           if (postsList.isEmpty) {
             return Center(
               child: Text(
@@ -67,6 +80,7 @@ class _UsersPostsListState extends State<UsersPostsList> {
                   itemBuilder: (context, index) {
                     final bool isLastItem = index <
                         ((widget.postCountToDisplay ?? postsList.length) - 1);
+                    final UserPost post = postsList[index];
 
                     return Padding(
                       padding: !isLastItem
@@ -74,13 +88,33 @@ class _UsersPostsListState extends State<UsersPostsList> {
                           : const EdgeInsets.only(bottom: 15),
                       child: widget.itemsType == ItemType.text
                           ? Text(
-                              '${index + 1}. ${postsList[index].title}',
+                              '${index + 1}. ${post.title}',
                               style: theme.textTheme.bodyMedium,
                             )
-                          : MyOutlinedButton(
-                              onPressed: () => context.go(
-                                  '/user-post-details?postId=${postsList[index].id}'),
-                              text: '${index + 1}. ${postsList[index].title}',
+                          : Row(
+                              children: [
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: MyOutlinedButton(
+                                    onPressed: () => context.go(
+                                        '/user-post-details?postId=${post.id}'),
+                                    text: '${index + 1}. ${post.title}',
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                IconButton(
+                                  onPressed: () => hidePost(post),
+                                  icon:
+                                      const Icon(Icons.remove_red_eye_outlined),
+                                  highlightColor: Colors.pink.shade100,
+                                ),
+                                IconButton(
+                                  onPressed: () => {},
+                                  icon: const Icon(
+                                      Icons.favorite_border_outlined),
+                                  highlightColor: Colors.pink.shade100,
+                                ),
+                              ],
                             ),
                     );
                   },
