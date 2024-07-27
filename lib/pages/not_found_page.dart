@@ -8,6 +8,8 @@ class NotFoundPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return PageContainer(
       child: Center(
           child: Column(
@@ -15,12 +17,12 @@ class NotFoundPage extends StatelessWidget {
         children: [
           Text(
             '404',
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: theme.textTheme.bodyLarge,
           ),
           const SizedBox(height: 10),
           Text(
             'Page was not found',
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: theme.textTheme.bodyLarge,
           ),
           const SizedBox(height: 20),
           MyUnderlinedButton(

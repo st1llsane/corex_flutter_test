@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-List<Widget> buildColumnWithGap(List<Widget> children, double gap) {
+List<Widget> buildColumnWithGap(List<Widget> children, {double gap = 12}) {
   List<Widget> spacedChildren = [];
 
   for (int i = 0; i < children.length; i++) {

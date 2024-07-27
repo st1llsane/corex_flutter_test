@@ -1,4 +1,4 @@
-enum ItemType {
+enum ListItemType {
   text,
   link,
 }

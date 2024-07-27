@@ -1,4 +1,6 @@
 import 'package:corex_flutter_test/api/bloc/user/user_bloc.dart';
+import 'package:corex_flutter_test/shared/container_with_scrollbar.dart';
+import 'package:corex_flutter_test/shared/error_message.dart';
 import 'package:corex_flutter_test/shared/models/user/user.dart';
 import 'package:corex_flutter_test/shared/types/types.dart';
 import 'package:corex_flutter_test/shared/ui/my_circular_progress_indicator.dart';
@@ -11,14 +13,14 @@ class UsersList extends StatefulWidget {
   final UserBloc userBloc;
   final int? userCountToDisplay;
   final Axis? direction;
-  final ItemType? itemsType;
+  final ListItemType? itemsType;
 
   const UsersList({
     super.key,
     required this.userBloc,
     this.userCountToDisplay,
     this.direction = Axis.vertical,
-    this.itemsType = ItemType.text,
+    this.itemsType = ListItemType.text,
   });
 
   @override
@@ -55,84 +57,71 @@ class _UsersListState extends State<UsersList> {
           }
 
           if (widget.direction == Axis.vertical) {
-            return ScrollbarTheme(
-              data: theme.scrollbarTheme,
-              child: Scrollbar(
-                controller: scrollController,
-                scrollbarOrientation: ScrollbarOrientation.left,
-                thumbVisibility: true,
-                trackVisibility: true,
-                radius: const Radius.circular(4),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: widget.userCountToDisplay ?? usersList.length,
-                    itemBuilder: (context, index) {
-                      final bool isLastItem = index <
-                          ((widget.userCountToDisplay ?? usersList.length) - 1);
-                      final User user = usersList[index];
+            return ContainerWithScrollbar(
+              scrollController: scrollController,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: widget.userCountToDisplay ?? usersList.length,
+                  itemBuilder: (context, index) {
+                    final bool isLastItem = index <
+                        ((widget.userCountToDisplay ?? usersList.length) - 1);
+                    final User user = usersList[index];
 
-                      return Padding(
-                        padding: !isLastItem
-                            ? const EdgeInsets.only(bottom: 0)
-                            : const EdgeInsets.only(bottom: 10),
-                        child: widget.itemsType == ItemType.text
-                            ? Text(
-                                '${index + 1}. ${user.name}',
-                                style: theme.textTheme.bodyMedium,
-                              )
-                            : MyOutlinedButton(
-                                onPressed: () => context.push(
-                                    '/all-users/user-details?userId=${user.id}'),
-                                text: '${index + 1}. ${user.name}',
-                              ),
-                      );
-                    },
-                  ),
+                    return Padding(
+                      padding: !isLastItem
+                          ? const EdgeInsets.only(bottom: 0)
+                          : const EdgeInsets.only(bottom: 10),
+                      child: widget.itemsType == ListItemType.text
+                          ? Text(
+                              '${index + 1}. ${user.name}',
+                              style: theme.textTheme.bodyMedium,
+                            )
+                          : MyOutlinedButton(
+                              onPressed: () => context.push(
+                                  '/all-users/user-details?userId=${user.id}'),
+                              text: '${index + 1}. ${user.name}',
+                            ),
+                    );
+                  },
                 ),
               ),
             );
           } else {
-            return ScrollbarTheme(
-              data: theme.scrollbarTheme,
-              child: Scrollbar(
+            return ContainerWithScrollbar(
+              scrollController: scrollController,
+              scrollbarOrientation: ScrollbarOrientation.bottom,
+              child: SingleChildScrollView(
                 controller: scrollController,
-                scrollbarOrientation: ScrollbarOrientation.bottom,
-                thumbVisibility: true,
-                trackVisibility: true,
-                radius: const Radius.circular(4),
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Row(
-                      children: List.generate(
-                        widget.userCountToDisplay ?? usersList.length,
-                        (index) {
-                          final bool isLastItem = index <
-                              ((widget.userCountToDisplay ?? usersList.length) -
-                                  1);
-                          final User user = usersList[index];
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    children: List.generate(
+                      widget.userCountToDisplay ?? usersList.length,
+                      (index) {
+                        final bool isLastItem = index <
+                            ((widget.userCountToDisplay ?? usersList.length) -
+                                1);
+                        final User user = usersList[index];
 
-                          return Padding(
-                            padding: isLastItem
-                                ? const EdgeInsets.only(right: 15)
-                                : const EdgeInsets.only(right: 2),
-                            child: widget.itemsType == ItemType.text
-                                ? Text(
-                                    '${index + 1}. ${user.name}',
-                                    style: theme.textTheme.bodyMedium,
-                                  )
-                                : MyOutlinedButton(
-                                    onPressed: () => context.push(
-                                        '/all-users/user-details?userId=${user.id}'),
-                                    text: '${index + 1}. ${user.name}',
-                                  ),
-                          );
-                        },
-                      ),
+                        return Padding(
+                          padding: isLastItem
+                              ? const EdgeInsets.only(right: 15)
+                              : const EdgeInsets.only(right: 2),
+                          child: widget.itemsType == ListItemType.text
+                              ? Text(
+                                  '${index + 1}. ${user.name}',
+                                  style: theme.textTheme.bodyMedium,
+                                )
+                              : MyOutlinedButton(
+                                  onPressed: () => context.push(
+                                      '/all-users/user-details?userId=${user.id}'),
+                                  text: '${index + 1}. ${user.name}',
+                                ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -142,22 +131,9 @@ class _UsersListState extends State<UsersList> {
         }
 
         if (state is UsersLoadingError) {
-          return Center(
-            child: Column(
-              children: [
-                Text(
-                  'Error when loading users. Please, try again later.',
-                  style: theme.textTheme.bodyLarge?.copyWith(
-                    color: Colors.red.shade600,
-                  ),
-                ),
-                const SizedBox(height: 15),
-                MyOutlinedButton(
-                  text: 'Try again',
-                  onPressed: () => widget.userBloc.add(LoadUsers()),
-                ),
-              ],
-            ),
+          return ErrorMessage(
+            message: 'Error when loading users. Please, try again later.',
+            onPressed: () => widget.userBloc.add(LoadUsers()),
           );
         }
 

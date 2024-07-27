@@ -26,15 +26,5 @@ class CorexFlutterTestApp extends StatelessWidget {
         routerConfig: routes,
       ),
     );
-
-    // return BlocProvider<FavoriteUserPostBloc>(
-    //   create: (context) => FavoriteUserPostBloc(),
-    //   child: MaterialApp.router(
-    //     title: 'Corex Flutter Test',
-    //     debugShowCheckedModeBanner: false,
-    //     theme: darkTheme,
-    //     routerConfig: routes,
-    //   ),
-    // );
   }
 }

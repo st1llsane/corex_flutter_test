@@ -1,10 +1,12 @@
 import 'package:corex_flutter_test/api/bloc/user_post/user_post_bloc.dart';
 import 'package:corex_flutter_test/api/repos/user_post/abstract_user_post_repo.dart';
-import 'package:corex_flutter_test/shared/models/post/post.dart';
+import 'package:corex_flutter_test/shared/container_with_scrollbar.dart';
+import 'package:corex_flutter_test/shared/error_message.dart';
+import 'package:corex_flutter_test/shared/models/user_post/user_post.dart';
 import 'package:corex_flutter_test/shared/ui/my_circular_progress_indicator.dart';
-import 'package:corex_flutter_test/shared/ui/my_outlined_button.dart';
+import 'package:corex_flutter_test/shared/ui/my_title.dart';
 import 'package:corex_flutter_test/shared/ui/my_underlined_button.dart';
-import 'package:corex_flutter_test/shared/utils/build_column_with_gap.dart';
+import 'package:corex_flutter_test/shared/utils/build_column_with_dynamic_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -39,56 +41,35 @@ class _UserPostDetailsPageState extends State<UserPostDetailsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const MyTitle(text: 'Post Details'),
         Expanded(
           child: BlocBuilder<UserPostBloc, UserPostState>(
             bloc: userPostBloc,
             builder: (context, state) {
-              final ThemeData theme = Theme.of(context);
-
               if (state is UserPostByIdLoaded) {
                 final UserPost post = state.userPost;
 
-                return ScrollbarTheme(
-                  data: theme.scrollbarTheme,
-                  child: Scrollbar(
-                    controller: scrollController,
-                    scrollbarOrientation: ScrollbarOrientation.left,
-                    thumbVisibility: true,
-                    trackVisibility: true,
-                    radius: const Radius.circular(4),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15),
-                      child: ListView(
-                        controller: scrollController,
-                        children: buildColumnWithGap([
-                          Text('Title: ${post.title}'),
-                          Text('Body: ${post.body}'),
-                        ], 12),
-                      ),
+                return ContainerWithScrollbar(
+                  scrollController: scrollController,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: ListView(
+                      controller: scrollController,
+                      children: buildColumnWithDynamicContent({
+                        'Title': post.title,
+                        'Body': post.body,
+                      }),
                     ),
                   ),
                 );
               }
 
               if (state is UserPostByIdLoadingError) {
-                return Center(
-                  child: Column(
-                    children: [
-                      Text(
+                return ErrorMessage(
+                    message:
                         'Error when loading users. Please, try again later.',
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: Colors.red.shade600,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      MyOutlinedButton(
-                        onPressed: () => userPostBloc
-                            .add(LoadUserPostById(postId: widget.postId)),
-                        text: 'Try again',
-                      ),
-                    ],
-                  ),
-                );
+                    onPressed: () => userPostBloc
+                        .add(LoadUserPostById(postId: widget.postId)));
               }
 
               return const MyCircularProgressIndicator();
@@ -98,7 +79,7 @@ class _UserPostDetailsPageState extends State<UserPostDetailsPage> {
         const SizedBox(height: 20),
         MyUnderlinedButton(
           onPressed: () => context.pop(),
-          text: 'All Posts',
+          text: 'Go Back',
           icon: Icons.arrow_back_ios,
           iconAlignment: IconAlignment.start,
         ),

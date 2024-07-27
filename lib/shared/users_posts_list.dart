@@ -1,7 +1,9 @@
 import 'package:corex_flutter_test/api/bloc/user_post/favorite/favorite_user_post_bloc.dart';
 import 'package:corex_flutter_test/api/bloc/user_post/hidden/hidden_user_post_bloc.dart';
 import 'package:corex_flutter_test/api/bloc/user_post/user_post_bloc.dart';
-import 'package:corex_flutter_test/shared/models/post/post.dart';
+import 'package:corex_flutter_test/shared/container_with_scrollbar.dart';
+import 'package:corex_flutter_test/shared/error_message.dart';
+import 'package:corex_flutter_test/shared/models/user_post/user_post.dart';
 import 'package:corex_flutter_test/shared/types/types.dart';
 import 'package:corex_flutter_test/shared/ui/my_circular_progress_indicator.dart';
 import 'package:corex_flutter_test/shared/ui/my_outlined_button.dart';
@@ -12,13 +14,13 @@ import 'package:go_router/go_router.dart';
 class UsersPostsList extends StatefulWidget {
   final UserPostBloc userPostBloc;
   final int? postCountToDisplay;
-  final ItemType? itemsType;
+  final ListItemType? itemsType;
 
   const UsersPostsList({
     super.key,
     required this.userPostBloc,
     this.postCountToDisplay,
-    this.itemsType = ItemType.text,
+    this.itemsType = ListItemType.text,
   });
 
   @override
@@ -105,86 +107,66 @@ class _UsersPostsListState extends State<UsersPostsList> {
               );
             }
 
-            return ScrollbarTheme(
-              data: theme.scrollbarTheme,
-              child: Scrollbar(
-                controller: scrollController,
-                scrollbarOrientation: ScrollbarOrientation.left,
-                thumbVisibility: true,
-                trackVisibility: true,
-                radius: const Radius.circular(4),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: widget.postCountToDisplay ?? postsList.length,
-                    itemBuilder: (context, index) {
-                      final bool isLastItem = index <
-                          ((widget.postCountToDisplay ?? postsList.length) - 1);
-                      final UserPost post = postsList[index];
+            return ContainerWithScrollbar(
+              scrollController: scrollController,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: ListView.builder(
+                  controller: scrollController,
+                  itemCount: widget.postCountToDisplay ?? postsList.length,
+                  itemBuilder: (context, index) {
+                    final bool isLastItem = index <
+                        ((widget.postCountToDisplay ?? postsList.length) - 1);
+                    final UserPost post = postsList[index];
 
-                      return Padding(
-                        padding: !isLastItem
-                            ? const EdgeInsets.only(bottom: 0)
-                            : const EdgeInsets.only(bottom: 15),
-                        child: widget.itemsType == ItemType.text
-                            ? Text(
-                                '${index + 1}. ${post.title}',
-                                style: theme.textTheme.bodyMedium,
-                              )
-                            : Row(
-                                children: [
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    child: MyOutlinedButton(
-                                      onPressed: () => context.go(
-                                          '/all-users-posts/user-post-details?postId=${post.id}'),
-                                      text: '${index + 1}. ${post.title}',
-                                    ),
+                    return Padding(
+                      padding: !isLastItem
+                          ? const EdgeInsets.only(bottom: 0)
+                          : const EdgeInsets.only(bottom: 10),
+                      child: widget.itemsType == ListItemType.text
+                          ? Text(
+                              '${index + 1}. ${post.title}',
+                              style: theme.textTheme.bodyMedium,
+                            )
+                          : Row(
+                              children: [
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: MyOutlinedButton(
+                                    onPressed: () => context.push(
+                                        '/all-users-posts/user-post-details?postId=${post.id}'),
+                                    text: '${index + 1}. ${post.title}',
                                   ),
-                                  const SizedBox(width: 5),
-                                  IconButton(
-                                    onPressed: () => hidePost(post),
-                                    icon: const Icon(
-                                        Icons.remove_red_eye_outlined),
-                                    highlightColor: Colors.pink.shade100,
+                                ),
+                                const SizedBox(width: 5),
+                                IconButton(
+                                  onPressed: () => hidePost(post),
+                                  icon:
+                                      const Icon(Icons.remove_red_eye_outlined),
+                                  highlightColor: Colors.pink.shade100,
+                                ),
+                                IconButton(
+                                  onPressed: () => setIsPostInFavorite(post),
+                                  icon: Icon(
+                                    isPostInFavorite(post)
+                                        ? Icons.favorite
+                                        : Icons.favorite_border_outlined,
                                   ),
-                                  IconButton(
-                                    onPressed: () => setIsPostInFavorite(post),
-                                    icon: Icon(
-                                      isPostInFavorite(post)
-                                          ? Icons.favorite
-                                          : Icons.favorite_border_outlined,
-                                    ),
-                                    highlightColor: Colors.pink.shade100,
-                                  ),
-                                ],
-                              ),
-                      );
-                    },
-                  ),
+                                  highlightColor: Colors.pink.shade100,
+                                ),
+                              ],
+                            ),
+                    );
+                  },
                 ),
               ),
             );
           }
 
-          if (state is UserPostsLoadingError) {
-            return Center(
-              child: Column(
-                children: [
-                  Text(
-                    'Error when loading posts. Please, try again later.',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: Colors.red.shade600,
-                    ),
-                  ),
-                  const SizedBox(height: 15),
-                  MyOutlinedButton(
-                    text: 'Try again',
-                    onPressed: () => widget.userPostBloc.add(LoadUsersPosts()),
-                  ),
-                ],
-              ),
+          if (state is UserPostsLoaded) {
+            ErrorMessage(
+              message: 'Error when loading posts. Please, try again later.',
+              onPressed: () => widget.userPostBloc.add(LoadUsersPosts()),
             );
           }
 

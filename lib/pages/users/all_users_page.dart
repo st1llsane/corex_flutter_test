@@ -1,6 +1,7 @@
 import 'package:corex_flutter_test/api/bloc/user/user_bloc.dart';
 import 'package:corex_flutter_test/api/repos/user/abstract_user_repo.dart';
 import 'package:corex_flutter_test/shared/types/types.dart';
+import 'package:corex_flutter_test/shared/ui/my_title.dart';
 import 'package:corex_flutter_test/shared/ui/my_underlined_button.dart';
 import 'package:corex_flutter_test/shared/users_list.dart';
 import 'package:flutter/material.dart';
@@ -29,15 +30,11 @@ class _AllUsersPageState extends State<AllUsersPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'All Users',
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
-        const SizedBox(height: 20),
+        const MyTitle(text: 'All Users'),
         Expanded(
           child: UsersList(
             userBloc: userBloc,
-            itemsType: ItemType.link,
+            itemsType: ListItemType.link,
           ),
         ),
         const SizedBox(height: 20),

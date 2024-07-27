@@ -4,6 +4,7 @@ import 'package:corex_flutter_test/api/bloc/user/user_bloc.dart';
 import 'package:corex_flutter_test/api/bloc/user_post/user_post_bloc.dart';
 import 'package:corex_flutter_test/api/repos/user/abstract_user_repo.dart';
 import 'package:corex_flutter_test/api/repos/user_post/abstract_user_post_repo.dart';
+import 'package:corex_flutter_test/shared/ui/my_title.dart';
 import 'package:corex_flutter_test/shared/ui/my_underlined_button.dart';
 import 'package:corex_flutter_test/shared/users_list.dart';
 import 'package:corex_flutter_test/shared/users_posts_list.dart';
@@ -32,8 +33,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return RefreshIndicator(
       onRefresh: () async {
         final userCompleter = Completer();
@@ -49,11 +48,7 @@ class _HomePageState extends State<HomePage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Users',
-                style: theme.textTheme.bodyLarge,
-              ),
-              const SizedBox(height: 20),
+              const MyTitle(text: 'Users'),
               UsersList(
                 userBloc: userBloc,
                 userCountToDisplay: 5,
@@ -77,11 +72,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'All Posts',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 20),
+                const MyTitle(text: 'Posts'),
                 Expanded(
                   child: UsersPostsList(
                     userPostBloc: userPostBloc,

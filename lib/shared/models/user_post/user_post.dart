@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'post.freezed.dart';
-part 'post.g.dart';
+part 'user_post.freezed.dart';
+part 'user_post.g.dart';
 
 @freezed
 class UserPost with _$UserPost {

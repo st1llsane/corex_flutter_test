@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:corex_flutter_test/api/repos/user_post/abstract_user_post_repo.dart';
-import 'package:corex_flutter_test/shared/models/post/post.dart';
+import 'package:corex_flutter_test/shared/models/user_post/user_post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'user_post_event.dart';

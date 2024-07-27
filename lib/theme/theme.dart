@@ -57,37 +57,4 @@ final darkTheme = ThemeData(
     interactive: true,
     minThumbLength: 10,
   ),
-  // extensions: <ThemeExtension<dynamic>>[
-  //   CustomColors(
-  //     errorColor: Colors.red.shade600,
-  //     externalLinkColor: const Color(0xFF4D8FF1),
-  //   ),
-  // ],
 );
-
-// COLORS
-// class CustomColors extends ThemeExtension<CustomColors> {
-//   final Color? errorColor;
-//   final Color? externalLinkColor;
-
-//   CustomColors({this.errorColor, this.externalLinkColor});
-
-//   @override
-//   CustomColors copyWith({Color? errorColor}) {
-//     return CustomColors(
-//       errorColor: errorColor ?? this.errorColor,
-//       externalLinkColor: externalLinkColor,
-//     );
-//   }
-
-//   @override
-//   CustomColors lerp(ThemeExtension<CustomColors>? other, double t) {
-//     if (other is! CustomColors) return this;
-
-//     return CustomColors(
-//       errorColor: Color.lerp(errorColor, other.errorColor, t),
-//       externalLinkColor:
-//           Color.lerp(externalLinkColor, other.externalLinkColor, t),
-//     );
-//   }
-// }
