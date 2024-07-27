@@ -1,4 +1,4 @@
-import 'package:corex_flutter_test/api/bloc/user_post/favorite_user_post_bloc.dart';
+import 'package:corex_flutter_test/api/bloc/user_post/favorite/favorite_user_post_bloc.dart';
 import 'package:corex_flutter_test/shared/favorite_users_posts_list.dart';
 import 'package:corex_flutter_test/shared/ui/my_underlined_button.dart';
 import 'package:flutter/material.dart';

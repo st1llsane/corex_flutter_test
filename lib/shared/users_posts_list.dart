@@ -1,4 +1,5 @@
-import 'package:corex_flutter_test/api/bloc/user_post/favorite_user_post_bloc.dart';
+import 'package:corex_flutter_test/api/bloc/user_post/favorite/favorite_user_post_bloc.dart';
+import 'package:corex_flutter_test/api/bloc/user_post/hidden/hidden_user_post_bloc.dart';
 import 'package:corex_flutter_test/api/bloc/user_post/user_post_bloc.dart';
 import 'package:corex_flutter_test/shared/models/post/post.dart';
 import 'package:corex_flutter_test/shared/types/types.dart';
@@ -26,7 +27,9 @@ class UsersPostsList extends StatefulWidget {
 
 class _UsersPostsListState extends State<UsersPostsList> {
   late ScrollController scrollController;
-  late List<UserPost> favoriteUsersPosts;
+  late List<UserPost> postsList;
+  late List<UserPost> favoritePosts;
+  late List<UserPost> hiddenPosts;
 
   @override
   void initState() {
@@ -35,31 +38,29 @@ class _UsersPostsListState extends State<UsersPostsList> {
     scrollController = ScrollController();
     widget.userPostBloc.add(LoadUsersPosts());
 
-    favoriteUsersPosts =
-        context.read<FavoriteUserPostBloc>().state.favoritePosts;
+    favoritePosts = context.read<FavoriteUserPostBloc>().state.favoritePosts;
+    hiddenPosts = context.read<HiddenUserPostBloc>().state.hiddenPosts;
   }
 
-  // void hidePost(UserPost post) {
-  //   setState(() {
-  //     postsList.remove(post);
-  //   });
-  // }
+  bool isPostHidden(UserPost post) {
+    final hiddenPosts = context.read<HiddenUserPostBloc>().state.hiddenPosts;
+
+    return hiddenPosts.any((hiddenPost) => hiddenPost.id == post.id);
+  }
+
+  void hidePost(UserPost post) {
+    context.read<HiddenUserPostBloc>().add(HideUserPost(post: post));
+  }
 
   bool isPostInFavorite(UserPost post) {
-    final favoriteUsersPosts =
+    final favoritePosts =
         context.read<FavoriteUserPostBloc>().state.favoritePosts;
 
-    return favoriteUsersPosts.any((favoritePost) => favoritePost.id == post.id);
+    return favoritePosts.any((favoritePost) => favoritePost.id == post.id);
   }
 
   void setIsPostInFavorite(UserPost post) {
-    final favoriteUsersPosts =
-        context.read<FavoriteUserPostBloc>().state.favoritePosts;
-
-    final isPostInFavorite =
-        favoriteUsersPosts.any((favoritePost) => favoritePost.id == post.id);
-
-    if (isPostInFavorite) {
+    if (isPostInFavorite(post)) {
       context
           .read<FavoriteUserPostBloc>()
           .add(RemoveUserPostFromFavorite(post: post));
@@ -72,10 +73,19 @@ class _UsersPostsListState extends State<UsersPostsList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<FavoriteUserPostBloc, FavoriteUserPostState>(
-      listener: (context, state) {
-        setState(() {});
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<FavoriteUserPostBloc, FavoriteUserPostState>(
+          listener: (context, state) {
+            setState(() {});
+          },
+        ),
+        BlocListener<HiddenUserPostBloc, HiddenUserPostState>(
+          listener: (context, state) {
+            setState(() {});
+          },
+        ),
+      ],
       child: BlocBuilder<UserPostBloc, UserPostState>(
         bloc: widget.userPostBloc,
         builder: (context, state) {
@@ -83,7 +93,8 @@ class _UsersPostsListState extends State<UsersPostsList> {
           late List<UserPost> postsList;
 
           if (state is UserPostsLoaded) {
-            postsList = state.usersPosts;
+            postsList =
+                state.usersPosts.where((post) => !isPostHidden(post)).toList();
 
             if (postsList.isEmpty) {
               return Center(
@@ -133,8 +144,7 @@ class _UsersPostsListState extends State<UsersPostsList> {
                                   ),
                                   const SizedBox(width: 5),
                                   IconButton(
-                                    // onPressed: () => hidePost(post),
-                                    onPressed: () {},
+                                    onPressed: () => hidePost(post),
                                     icon: const Icon(
                                         Icons.remove_red_eye_outlined),
                                     highlightColor: Colors.pink.shade100,
