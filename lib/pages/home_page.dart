@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          const SizedBox(height: 35),
+          const SizedBox(height: 20),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
